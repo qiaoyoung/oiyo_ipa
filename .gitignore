@@ -1,0 +1,4 @@
+# .gitignore
+# 忽略 IPA 文件但不忽略分片
+*.ipa
+!*.ipa.part*

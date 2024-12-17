@@ -1,0 +1,44 @@
+name: Upload iOS App to App Store
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 合并文件片段
+    - name: Merge IPA parts
+      run: |
+        cat ios/oiyo.ipa.part* > ios/oiyo.ipa
+
+    # 验证文件完整性
+    - name: Verify file integrity
+      run: |
+        EXPECTED_MD5="91f5a703f690b391a585e23ab593e505"
+        ACTUAL_MD5=$(md5 -q ios/oiyo.ipa)
+        
+        if [ "$EXPECTED_MD5" != "$ACTUAL_MD5" ]; then
+          echo "IPA file integrity check failed"
+          exit 1
+        fi
+
+    # 上传到 App Store
+    - name: Upload to App Store using altool
+      env:
+        IPA_PATH: "ios/oiyo.ipa"
+        APPLE_ID: "Nina2000HH@outlook.com"
+        APP_SPECIFIC_PASSWORD: "zeqo-kyio-mlkw-kbwf"
+      run: |
+        xcrun altool --upload-app -f "$IPA_PATH" \
+          -t ios \
+          -u "$APPLE_ID" \
+          -p "$APP_SPECIFIC_PASSWORD" \
+          --verbose
+
