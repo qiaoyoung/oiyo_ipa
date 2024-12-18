@@ -21,7 +21,7 @@ jobs:
     # 验证文件完整性
     - name: Verify file integrity
       run: |
-        EXPECTED_MD5="91f5a703f690b391a585e23ab593e505"
+        EXPECTED_MD5="cefa019e629f1bd8d80ab7f0aeb660d3"
         ACTUAL_MD5=$(md5 -q ios/oiyo.ipa)
         
         if [ "$EXPECTED_MD5" != "$ACTUAL_MD5" ]; then
